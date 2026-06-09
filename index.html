@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Hayyo Academy - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #f0f2f5 0%, #e0e5ec 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.1), 0 5px 12px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .login-container:hover {
+            transform: translateY(-2px);
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-logo h1 {
+            font-size: 1.8rem;
+            color: #0f6cbf;
+            margin-bottom: 0.25rem;
+            display: inline-block;
+            background: linear-gradient(135deg, #0f6cbf, #094478);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-logo p {
+            color: #6a737b;
+            font-size: 0.85rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #e8f4fd;
+            padding: 0.2rem 0.8rem;
+            border-radius: 2rem;
+            font-size: 0.7rem;
+            color: #0f6cbf;
+            margin-top: 0.5rem;
+        }
+
+        .login-form {
+            margin-top: 1rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #1d2125;
+            font-size: 0.85rem;
+        }
+
+        .password-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .helper-text {
+            font-size: 0.7rem;
+            color: #6a737b;
+            font-weight: normal;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            font-size: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.75rem;
+            font-family: monospace;
+            font-size: 1rem;
+            text-align: center;
+            transition: all 0.2s ease;
+            background: #f8fafc;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #0f6cbf;
+            box-shadow: 0 0 0 3px rgba(15,108,191,0.2);
+            background: white;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #94a3b8;
+            padding: 0.25rem;
+            transition: color 0.2s;
+        }
+
+        .toggle-password:hover {
+            color: #0f6cbf;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 0.85rem;
+            background: linear-gradient(135deg, #0f6cbf 0%, #094478 100%);
+            color: white;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(15,108,191,0.3);
+        }
+
+        .login-btn:disabled {
+            background: #94a3b8;
+            transform: none;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 0.85rem;
+            display: none;
+            border-left: 4px solid #dc2626;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            width: 28px;
+            height: 28px;
+            border: 3px solid #e2e8f0;
+            border-top-color: #0f6cbf;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .warning-text {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding: 0.75rem;
+            background: #fffbeb;
+            border-radius: 0.75rem;
+            font-size: 0.7rem;
+            color: #b45309;
+            border-left: 4px solid #f59e0b;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 2px dotted #e2e8f0;
+            font-size: 0.7rem;
+            color: #94a3b8;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 1.5rem;
+            }
+            .login-logo h1 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-container">
+            <div class="login-logo">
+                <h1>🏫 Hayyo Academy</h1>
+                <p>online ESSLCE-equivalent exam practice portal</p>
+                <div class="badge">⭐ Practice Portal ⭐</div>
+            </div>
+
+            <div class="error-message" id="errorMessage"></div>
+
+            <form class="login-form" id="loginForm">
+                <div class="input-group">
+                    <label for="name">Enter your name (only first name)</label>
+                    <div class="input-wrapper">
+                        <input type="text" 
+                               id="name" 
+                               name="name" 
+                               placeholder=".............."
+                               autocomplete="off"
+                               required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="password-header">
+                        <label for="password">Enter password</label>
+                        <span class="helper-text">(Password you got from instructor)</span>
+                    </div>
+                    <div class="input-wrapper">
+                        <input type="password" 
+                               id="password" 
+                               name="password" 
+                               placeholder=".............."
+                               autocomplete="off"
+                               required>
+                        <button type="button" class="toggle-password" id="togglePassword" aria-label="Toggle password visibility">
+                            🙈
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">🔐 Log in</button>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 0.5rem; font-size: 0.8rem; color: #0f6cbf;">Verifying...</p>
+                </div>
+            </form>
+
+            <div class="warning-text">
+                ⚠️ Take screenshot or don't forget your name and password to login next time
+            </div>
+
+            <footer>
+                © 2026 Hayyo Academy
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // HAYYO ACADEMY - LOGIN SYSTEM
+        // ============================================
+        
+        // Your Apps Script URL (UPDATED)
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwfnTC9FTTCaNC-pJZ8r8oBHinpzWCTsQRcEMZoEEJjvi32TFqZDr7Wz9iIeCiqFNpoFA/exec';
+        
+        const nameInput = document.getElementById('name');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginForm = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('errorMessage');
+        const loading = document.getElementById('loading');
+        const togglePasswordBtn = document.getElementById('togglePassword');
+
+        // Toggle password visibility
+        togglePasswordBtn.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.textContent = type === 'password' ? '🙈' : '👁️';
+        });
+
+        // Remove error when user starts typing
+        nameInput.addEventListener('input', function() {
+            errorMessage.classList.remove('show');
+        });
+        
+        passwordInput.addEventListener('input', function() {
+            errorMessage.classList.remove('show');
+        });
+
+        // Handle form submission
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = nameInput.value.trim();
+            const password = passwordInput.value.trim();
+            
+            if (!name) {
+                errorMessage.textContent = 'Please enter your name.';
+                errorMessage.classList.add('show');
+                return;
+            }
+            
+            if (!password) {
+                errorMessage.textContent = 'Please enter your password.';
+                errorMessage.classList.add('show');
+                return;
+            }
+
+            loginBtn.disabled = true;
+            loading.classList.add('show');
+            errorMessage.classList.remove('show');
+
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `name=${encodeURIComponent(name)}&password=${encodeURIComponent(password)}`
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    localStorage.setItem('hayyo_logged_in', 'true');
+                    localStorage.setItem('hayyo_student_name', name);
+                    localStorage.setItem('hayyo_password', password);
+                    localStorage.setItem('hayyo_login_time', Date.now().toString());
+                    
+                    window.location.href = 'rounds.html';
+                } else {
+                    errorMessage.textContent = result.message;
+                    errorMessage.classList.add('show');
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                errorMessage.textContent = 'Unable to connect. Please check your internet connection.';
+                errorMessage.classList.add('show');
+            } finally {
+                loginBtn.disabled = false;
+                loading.classList.remove('show');
+            }
+        });
+
+        // AUTO-REDIRECT DISABLED - Students will always see login page
+        // To enable auto-redirect for returning users, remove the // below:
+        // checkExistingSession();
+        
+        function checkExistingSession() {
+            const loggedIn = localStorage.getItem('hayyo_logged_in');
+            const loginTime = localStorage.getItem('hayyo_login_time');
+            
+            if (loggedIn === 'true' && loginTime) {
+                const timeSinceLogin = Date.now() - parseInt(loginTime);
+                const SESSION_DURATION = 8 * 60 * 60 * 1000;
+                
+                if (timeSinceLogin < SESSION_DURATION) {
+                    window.location.href = 'rounds.html';
+                } else {
+                    localStorage.removeItem('hayyo_logged_in');
+                    localStorage.removeItem('hayyo_student_name');
+                    localStorage.removeItem('hayyo_password');
+                    localStorage.removeItem('hayyo_login_time');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
